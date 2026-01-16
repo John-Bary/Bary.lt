@@ -1,0 +1,41 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vitomi preview">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="675" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="0.55" stop-color="#EDE9FE"/>
+      <stop offset="1" stop-color="#DBEAFE"/>
+    </linearGradient>
+    <linearGradient id="overlay" x1="0" y1="0" x2="0" y2="675" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#000000" stop-opacity="0.10"/>
+      <stop offset="0.6" stop-color="#000000" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.18"/>
+    </linearGradient>
+    <filter id="blur" x="-50" y="-50" width="1300" height="775" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#overlay)"/>
+
+  <g opacity="0.6" filter="url(#blur)">
+    <circle cx="250" cy="520" r="220" fill="#A78BFA"/>
+    <circle cx="980" cy="230" r="200" fill="#22D3EE"/>
+  </g>
+
+  <g opacity="0.35">
+    <rect x="130" y="160" width="420" height="18" rx="9" fill="#0F172A"/>
+    <rect x="130" y="195" width="340" height="18" rx="9" fill="#0F172A"/>
+    <rect x="130" y="230" width="280" height="18" rx="9" fill="#0F172A"/>
+  </g>
+
+  <g>
+    <rect x="72" y="420" width="1056" height="170" rx="28" fill="#0B1220" fill-opacity="0.55"/>
+    <text x="110" y="490" fill="#FFFFFF" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="52" font-weight="800" letter-spacing="2">
+      VITOMI
+    </text>
+    <text x="110" y="548" fill="#67E8F9" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">
+      thevitomi.com
+    </text>
+  </g>
+</svg>

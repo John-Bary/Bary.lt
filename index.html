@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Portfolio | 3D Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --dark: #0f0f1a;
+            --darker: #070710;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(7, 7, 16, 0.95), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s, transform 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3)); }
+            to { filter: drop-shadow(0 0 40px rgba(6, 182, 212, 0.5)); }
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--text-muted);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats Section */
+        #stats {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 50%, var(--darker) 100%);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.5s;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stat-bar {
+            margin-top: 1.5rem;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+
+        /* Projects Section */
+        #projects {
+            background: var(--darker);
+            min-height: 100vh;
+        }
+
+        .projects-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            perspective: 1500px;
+        }
+
+        .carousel-container {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-card {
+            position: absolute;
+            width: 350px;
+            height: 420px;
+            left: 50%;
+            top: 50%;
+            margin-left: -175px;
+            margin-top: -210px;
+            background: linear-gradient(145deg, rgba(30, 30, 50, 0.9), rgba(15, 15, 30, 0.95));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px;
+            padding: 0;
+            overflow: hidden;
+            cursor: pointer;
+            transition: box-shadow 0.5s, border-color 0.5s;
+            backface-visibility: hidden;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 60px rgba(6, 182, 212, 0.3);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .project-image-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            opacity: 0.5;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .project-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: gap 0.3s;
+        }
+
+        .project-link:hover {
+            gap: 1rem;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: var(--accent);
+            transform: scale(1.3);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        /* Tech Stack Section */
+        #tech {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+            min-height: 100vh;
+        }
+
+        .tech-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .tech-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .tech-item {
+            background: linear-gradient(145deg, rgba(30, 30, 50, 0.8), rgba(15, 15, 30, 0.9));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .tech-item:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-15px) scale(1.05);
+            border-color: var(--accent);
+            box-shadow: 0 25px 50px rgba(6, 182, 212, 0.2);
+        }
+
+        .tech-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .tech-item:hover .tech-icon {
+            transform: rotateY(180deg) scale(1.1);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .tech-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tech-level {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tech-progress {
+            margin-top: 1rem;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tech-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            width: 0;
+            transition: width 1s ease-out;
+        }
+
+        /* Tech Detail Modal */
+        .tech-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s;
+        }
+
+        .tech-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tech-modal-content {
+            background: linear-gradient(145deg, var(--dark), var(--darker));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.8) translateY(50px);
+            transition: transform 0.4s;
+            position: relative;
+        }
+
+        .tech-modal.active .tech-modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .tech-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .tech-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tech-modal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .tech-modal-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-modal-level {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-modal-desc {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-modal-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .tech-modal-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+        }
+
+        .tech-modal-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .tech-modal-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            background: var(--darker);
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        footer p {
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .project-card {
+                width: 280px;
+                height: 380px;
+                margin-left: -140px;
+                margin-top: -190px;
+            }
+
+            .carousel-container {
+                height: 420px;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .tech-item {
+                padding: 1.5rem 1rem;
+            }
+
+            .tech-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Portfolio</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#stats">Stats</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#tech">Tech Stack</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+            <h1>Creative Developer</h1>
+            <p>Crafting immersive digital experiences with cutting-edge technology and creative vision</p>
+            <button class="cta-button" onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})">
+                Explore My Work
+            </button>
+        </div>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats">
+        <div class="section-title">
+            <h2>By The Numbers</h2>
+            <p>A snapshot of my journey and accomplishments in the digital world</p>
+        </div>
+        <div class="stats-container">
+            <div class="stat-card" data-target="50" data-suffix="+">
+                <div class="stat-icon">🚀</div>
+                <div class="stat-number">0</div>
+                <div class="stat-label">Projects Completed</div>
+                <div class="stat-bar"><div class="stat-bar-fill" data-width="90%"></div></div>
+            </div>
+            <div class="stat-card" data-target="5" data-suffix="+">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-number">0</div>
+                <div class="stat-label">Years Experience</div>
+                <div class="stat-bar"><div class="stat-bar-fill" data-width="75%"></div></div>
+            </div>
+            <div class="stat-card" data-target="30" data-suffix="+">
+                <div class="stat-icon">😊</div>
+                <div class="stat-number">0</div>
+                <div class="stat-label">Happy Clients</div>
+                <div class="stat-bar"><div class="stat-bar-fill" data-width="85%"></div></div>
+            </div>
+            <div class="stat-card" data-target="15" data-suffix="">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-number">0</div>
+                <div class="stat-label">Awards Won</div>
+                <div class="stat-bar"><div class="stat-bar-fill" data-width="60%"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="section-title">
+            <h2>Featured Projects</h2>
+            <p>Explore my latest work and creative endeavors</p>
+        </div>
+        <div class="projects-wrapper">
+            <div class="carousel-container">
+                <div class="carousel" id="carousel">
+                    <!-- Project cards will be inserted by JS -->
+                </div>
+            </div>
+            <div class="carousel-nav">
+                <button class="carousel-btn" onclick="rotateCarousel(-1)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                <button class="carousel-btn" onclick="rotateCarousel(1)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="carousel-dots" id="carousel-dots"></div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="tech">
+        <div class="section-title">
+            <h2>Tech Stack</h2>
+            <p>Technologies I work with to bring ideas to life</p>
+        </div>
+        <div class="tech-container">
+            <canvas class="tech-canvas" id="tech-canvas"></canvas>
+            <div class="tech-grid" id="tech-grid">
+                <!-- Tech items will be inserted by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Modal -->
+    <div class="tech-modal" id="tech-modal">
+        <div class="tech-modal-content">
+            <button class="tech-modal-close" onclick="closeTechModal()">✕</button>
+            <div class="tech-modal-icon" id="modal-icon">⚛️</div>
+            <h3 class="tech-modal-title" id="modal-title">React</h3>
+            <p class="tech-modal-level" id="modal-level">Expert Level</p>
+            <p class="tech-modal-desc" id="modal-desc">Description here</p>
+            <div class="tech-modal-stats">
+                <div class="tech-modal-stat">
+                    <div class="tech-modal-stat-value" id="modal-projects">25+</div>
+                    <div class="tech-modal-stat-label">Projects</div>
+                </div>
+                <div class="tech-modal-stat">
+                    <div class="tech-modal-stat-value" id="modal-years">4+</div>
+                    <div class="tech-modal-stat-label">Years</div>
+                </div>
+                <div class="tech-modal-stat">
+                    <div class="tech-modal-stat-value" id="modal-confidence">95%</div>
+                    <div class="tech-modal-stat-label">Confidence</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Creative Portfolio. Built with passion and code.</p>
+    </footer>
+
+    <script>
+        // ============================================
+        // HERO CANVAS - Animated Particles & Connections
+        // ============================================
+        const heroCanvas = document.getElementById('hero-canvas');
+        const heroCtx = heroCanvas.getContext('2d');
+        let heroParticles = [];
+        let mouseX = 0, mouseY = 0;
+
+        function resizeHeroCanvas() {
+            heroCanvas.width = window.innerWidth;
+            heroCanvas.height = window.innerHeight;
+        }
+
+        class HeroParticle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * heroCanvas.width;
+                this.y = Math.random() * heroCanvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.hue = Math.random() * 60 + 220; // Blue to purple range
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Mouse interaction
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 150) {
+                    const force = (150 - dist) / 150;
+                    this.x -= dx * force * 0.02;
+                    this.y -= dy * force * 0.02;
+                }
+
+                // Wrap around
+                if (this.x < 0) this.x = heroCanvas.width;
+                if (this.x > heroCanvas.width) this.x = 0;
+                if (this.y < 0) this.y = heroCanvas.height;
+                if (this.y > heroCanvas.height) this.y = 0;
+            }
+
+            draw() {
+                heroCtx.beginPath();
+                heroCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                heroCtx.fillStyle = `hsla(${this.hue}, 80%, 60%, ${this.opacity})`;
+                heroCtx.fill();
+            }
+        }
+
+        function initHeroParticles() {
+            heroParticles = [];
+            const count = Math.min(100, Math.floor((heroCanvas.width * heroCanvas.height) / 15000));
+            for (let i = 0; i < count; i++) {
+                heroParticles.push(new HeroParticle());
+            }
+        }
+
+        function drawHeroConnections() {
+            for (let i = 0; i < heroParticles.length; i++) {
+                for (let j = i + 1; j < heroParticles.length; j++) {
+                    const dx = heroParticles[i].x - heroParticles[j].x;
+                    const dy = heroParticles[i].y - heroParticles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 120) {
+                        const opacity = (1 - dist / 120) * 0.3;
+                        heroCtx.beginPath();
+                        heroCtx.moveTo(heroParticles[i].x, heroParticles[i].y);
+                        heroCtx.lineTo(heroParticles[j].x, heroParticles[j].y);
+                        heroCtx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+                        heroCtx.lineWidth = 1;
+                        heroCtx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateHero() {
+            heroCtx.fillStyle = 'rgba(7, 7, 16, 0.1)';
+            heroCtx.fillRect(0, 0, heroCanvas.width, heroCanvas.height);
+
+            drawHeroConnections();
+
+            heroParticles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animateHero);
+        }
+
+        // ============================================
+        // STATS COUNTER ANIMATION
+        // ============================================
+        function animateStats() {
+            const statCards = document.querySelectorAll('.stat-card');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const numberEl = card.querySelector('.stat-number');
+                        const target = parseInt(card.dataset.target);
+                        const suffix = card.dataset.suffix || '';
+                        const barFill = card.querySelector('.stat-bar-fill');
+
+                        // Animate number
+                        let current = 0;
+                        const increment = target / 60;
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(timer);
+                            }
+                            numberEl.textContent = Math.floor(current) + suffix;
+                        }, 30);
+
+                        // Animate bar
+                        setTimeout(() => {
+                            barFill.style.width = barFill.dataset.width;
+                        }, 200);
+
+                        observer.unobserve(card);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statCards.forEach(card => observer.observe(card));
+        }
+
+        // ============================================
+        // 3D CAROUSEL
+        // ============================================
+        const projects = [
+            {
+                title: "E-Commerce Platform",
+                description: "Full-stack e-commerce solution with real-time inventory and AI-powered recommendations.",
+                tags: ["React", "Node.js", "MongoDB"],
+                icon: "🛒",
+                color: "linear-gradient(135deg, #667eea, #764ba2)"
+            },
+            {
+                title: "AI Dashboard",
+                description: "Interactive analytics dashboard with machine learning insights and predictive modeling.",
+                tags: ["Python", "TensorFlow", "D3.js"],
+                icon: "🤖",
+                color: "linear-gradient(135deg, #f093fb, #f5576c)"
+            },
+            {
+                title: "Mobile Banking App",
+                description: "Secure fintech application with biometric authentication and real-time transactions.",
+                tags: ["React Native", "Firebase", "Stripe"],
+                icon: "💳",
+                color: "linear-gradient(135deg, #4facfe, #00f2fe)"
+            },
+            {
+                title: "Social Network",
+                description: "Modern social platform with real-time messaging, stories, and content discovery.",
+                tags: ["Vue.js", "GraphQL", "PostgreSQL"],
+                icon: "💬",
+                color: "linear-gradient(135deg, #43e97b, #38f9d7)"
+            },
+            {
+                title: "3D Game Engine",
+                description: "WebGL-based game engine with physics simulation and particle systems.",
+                tags: ["Three.js", "WebGL", "TypeScript"],
+                icon: "🎮",
+                color: "linear-gradient(135deg, #fa709a, #fee140)"
+            },
+            {
+                title: "Health Tracker",
+                description: "Comprehensive wellness app with wearable integration and health analytics.",
+                tags: ["Flutter", "HealthKit", "Charts"],
+                icon: "❤️",
+                color: "linear-gradient(135deg, #a8edea, #fed6e3)"
+            }
+        ];
+
+        let currentIndex = 0;
+        const carousel = document.getElementById('carousel');
+        const dotsContainer = document.getElementById('carousel-dots');
+
+        function createCarousel() {
+            const cardCount = projects.length;
+            const angleStep = 360 / cardCount;
+            const radius = 400;
+
+            projects.forEach((project, i) => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="project-image" style="background: ${project.color}">
+                        <div class="project-image-icon">${project.icon}</div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                        </div>
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description}</p>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                `;
+                carousel.appendChild(card);
+
+                // Create dot
+                const dot = document.createElement('div');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            });
+
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const cards = carousel.querySelectorAll('.project-card');
+            const cardCount = cards.length;
+            const angleStep = 360 / cardCount;
+
+            cards.forEach((card, i) => {
+                const angle = (i - currentIndex) * angleStep;
+                const radian = (angle * Math.PI) / 180;
+                const z = Math.cos(radian) * 300;
+                const x = Math.sin(radian) * 400;
+                const scale = (z + 300) / 600 * 0.5 + 0.5;
+                const opacity = (z + 300) / 600 * 0.7 + 0.3;
+
+                card.style.transform = `translateX(${x}px) translateZ(${z}px) scale(${scale})`;
+                card.style.opacity = opacity;
+                card.style.zIndex = Math.round(z);
+            });
+
+            // Update dots
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        function rotateCarousel(direction) {
+            currentIndex = (currentIndex + direction + projects.length) % projects.length;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+
+        // Auto-rotate carousel
+        setInterval(() => rotateCarousel(1), 5000);
+
+        // ============================================
+        // TECH STACK
+        // ============================================
+        const techStack = [
+            { name: "React", icon: "⚛️", level: "Expert", progress: 95, years: 4, projects: 25, desc: "Building complex, scalable user interfaces with React ecosystem including Redux, Next.js, and React Query." },
+            { name: "Node.js", icon: "🟢", level: "Expert", progress: 90, years: 5, projects: 30, desc: "Server-side JavaScript development with Express, NestJS, and microservices architecture." },
+            { name: "Python", icon: "🐍", level: "Advanced", progress: 85, years: 3, projects: 15, desc: "Data science, machine learning with TensorFlow/PyTorch, and backend development with Django/FastAPI." },
+            { name: "TypeScript", icon: "📘", level: "Expert", progress: 92, years: 3, projects: 20, desc: "Type-safe JavaScript development for both frontend and backend applications." },
+            { name: "Three.js", icon: "🎲", level: "Advanced", progress: 80, years: 2, projects: 8, desc: "Creating immersive 3D web experiences, WebGL visualizations, and interactive graphics." },
+            { name: "PostgreSQL", icon: "🐘", level: "Advanced", progress: 85, years: 4, projects: 18, desc: "Database design, optimization, complex queries, and data modeling." },
+            { name: "Docker", icon: "🐳", level: "Intermediate", progress: 75, years: 2, projects: 12, desc: "Containerization, Docker Compose, and container orchestration basics." },
+            { name: "AWS", icon: "☁️", level: "Advanced", progress: 82, years: 3, projects: 15, desc: "Cloud architecture with EC2, S3, Lambda, RDS, and infrastructure as code." },
+            { name: "GraphQL", icon: "◈", level: "Advanced", progress: 88, years: 2, projects: 10, desc: "API design with Apollo Server/Client, schema design, and real-time subscriptions." },
+            { name: "Figma", icon: "🎨", level: "Intermediate", progress: 70, years: 2, projects: 20, desc: "UI/UX design, prototyping, and design system creation." },
+            { name: "Git", icon: "📦", level: "Expert", progress: 95, years: 5, projects: 50, desc: "Version control, branching strategies, and collaborative development workflows." },
+            { name: "Redis", icon: "🔴", level: "Intermediate", progress: 72, years: 2, projects: 8, desc: "Caching strategies, session management, and pub/sub messaging." }
+        ];
+
+        function createTechGrid() {
+            const grid = document.getElementById('tech-grid');
+
+            techStack.forEach((tech, i) => {
+                const item = document.createElement('div');
+                item.className = 'tech-item';
+                item.style.animationDelay = `${i * 0.1}s`;
+                item.innerHTML = `
+                    <div class="tech-icon">${tech.icon}</div>
+                    <div class="tech-name">${tech.name}</div>
+                    <div class="tech-level">${tech.level}</div>
+                    <div class="tech-progress">
+                        <div class="tech-progress-fill" data-width="${tech.progress}%"></div>
+                    </div>
+                `;
+                item.onclick = () => openTechModal(tech);
+                grid.appendChild(item);
+            });
+
+            // Animate progress bars on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const fills = entry.target.querySelectorAll('.tech-progress-fill');
+                        fills.forEach(fill => {
+                            setTimeout(() => {
+                                fill.style.width = fill.dataset.width;
+                            }, 300);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(grid);
+        }
+
+        function openTechModal(tech) {
+            const modal = document.getElementById('tech-modal');
+            document.getElementById('modal-icon').textContent = tech.icon;
+            document.getElementById('modal-title').textContent = tech.name;
+            document.getElementById('modal-level').textContent = tech.level + ' Level';
+            document.getElementById('modal-desc').textContent = tech.desc;
+            document.getElementById('modal-projects').textContent = tech.projects + '+';
+            document.getElementById('modal-years').textContent = tech.years + '+';
+            document.getElementById('modal-confidence').textContent = tech.progress + '%';
+            modal.classList.add('active');
+        }
+
+        function closeTechModal() {
+            document.getElementById('tech-modal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('tech-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'tech-modal') closeTechModal();
+        });
+
+        // ============================================
+        // TECH CANVAS - Floating Connections
+        // ============================================
+        const techCanvas = document.getElementById('tech-canvas');
+        const techCtx = techCanvas.getContext('2d');
+        let techNodes = [];
+
+        function resizeTechCanvas() {
+            const container = techCanvas.parentElement;
+            techCanvas.width = container.offsetWidth;
+            techCanvas.height = container.offsetHeight;
+        }
+
+        function initTechNodes() {
+            techNodes = [];
+            for (let i = 0; i < 30; i++) {
+                techNodes.push({
+                    x: Math.random() * techCanvas.width,
+                    y: Math.random() * techCanvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 3 + 1
+                });
+            }
+        }
+
+        function animateTechCanvas() {
+            techCtx.clearRect(0, 0, techCanvas.width, techCanvas.height);
+
+            techNodes.forEach(node => {
+                node.x += node.vx;
+                node.y += node.vy;
+
+                if (node.x < 0 || node.x > techCanvas.width) node.vx *= -1;
+                if (node.y < 0 || node.y > techCanvas.height) node.vy *= -1;
+
+                techCtx.beginPath();
+                techCtx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+                techCtx.fillStyle = 'rgba(99, 102, 241, 0.3)';
+                techCtx.fill();
+            });
+
+            // Draw connections
+            for (let i = 0; i < techNodes.length; i++) {
+                for (let j = i + 1; j < techNodes.length; j++) {
+                    const dx = techNodes[i].x - techNodes[j].x;
+                    const dy = techNodes[i].y - techNodes[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 150) {
+                        techCtx.beginPath();
+                        techCtx.moveTo(techNodes[i].x, techNodes[i].y);
+                        techCtx.lineTo(techNodes[j].x, techNodes[j].y);
+                        techCtx.strokeStyle = `rgba(99, 102, 241, ${(1 - dist / 150) * 0.2})`;
+                        techCtx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateTechCanvas);
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            // Hero
+            resizeHeroCanvas();
+            initHeroParticles();
+            animateHero();
+
+            // Stats
+            animateStats();
+
+            // Carousel
+            createCarousel();
+
+            // Tech
+            createTechGrid();
+            resizeTechCanvas();
+            initTechNodes();
+            animateTechCanvas();
+
+            // Mouse tracking
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Resize handling
+            window.addEventListener('resize', () => {
+                resizeHeroCanvas();
+                initHeroParticles();
+                resizeTechCanvas();
+                initTechNodes();
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>

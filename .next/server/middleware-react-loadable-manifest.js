@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST='{"components/three/Scene3DWrapper.tsx -> ./Scene3D":{"id":3793,"files":["static/chunks/b536a0f1.69e6f0c640780c54.js","static/chunks/496.79407f1925d19391.js","static/chunks/793.c6c08de44c9a7748.js"]}}';
