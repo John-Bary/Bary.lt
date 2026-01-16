@@ -84,7 +84,7 @@ const projectsByLanguage: Record<string, Project[]> = {
       title: "Pašilaičiai P.C.",
       subtitle: "www.pasilaiciaipc.lt",
       description:
-        "Rinkodaros strategija, svetainės dizainas ir nuolatinė pagalba prekybos centrui.",
+        "Rinkodaros strategijos, svetainės dizainas ir nuolatinė pagalba prekybos centrui.",
       tags: ["Rinkodaros strategija", "Svetainės dizainas", "Priežiūra"],
       imageSrc: "/case-studies/pasilaiciai.jpg",
       fallbackImageSrc: "/case-studies/pasilaiciai.svg",
