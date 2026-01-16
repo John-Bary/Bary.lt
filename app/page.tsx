@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/ui/Navbar";
 import LoadingScreen from "@/components/ui/LoadingScreen";
@@ -213,6 +213,78 @@ const copyByLanguage = {
 export default function Home(): React.JSX.Element {
   const { isDark, isLoaded, language } = useThemeStore();
   const copy = copyByLanguage[language];
+
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    helpType: "",
+    projectDetails: "",
+  });
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const isSubmitting = status === "submitting";
+  const isFormValid =
+    formState.name.trim().length > 0 &&
+    formState.email.trim().length > 0 &&
+    formState.helpType.trim().length > 0;
+  const successMessage =
+    language === "lt"
+      ? "Ačiū! Atsakysime per 24 valandas."
+      : "Thanks! We'll reply within 24 hours.";
+
+  const handleFieldChange = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ): void => {
+    const { name, value } = event.target;
+    setFormState((prev) => ({ ...prev, [name]: value }));
+
+    if (status === "error") {
+      setStatus("idle");
+      setErrorMessage(null);
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault();
+    setStatus("submitting");
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formState.name.trim(),
+          email: formState.email.trim(),
+          helpType: formState.helpType,
+          projectDetails: formState.projectDetails.trim(),
+          language,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as { error?: string } | null;
+        setStatus("error");
+        setErrorMessage(data?.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+
+      setStatus("success");
+      setFormState({
+        name: "",
+        email: "",
+        helpType: "",
+        projectDetails: "",
+      });
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage("Unable to submit right now. Please try again.");
+    }
+  };
 
   useEffect(() => {
     document.documentElement.lang = language;
@@ -613,11 +685,20 @@ export default function Home(): React.JSX.Element {
             </p>
 
             {/* Contact Form */}
-            <form className="max-w-md mx-auto space-y-4 mb-8">
+            <form
+              className="max-w-md mx-auto space-y-4 mb-8"
+              onSubmit={handleSubmit}
+            >
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="text"
+                  name="name"
+                  value={formState.name}
+                  onChange={handleFieldChange}
                   placeholder={copy.contact.form.namePlaceholder}
+                  maxLength={120}
+                  autoComplete="name"
+                  required
                   className={`w-full px-6 py-4 rounded-xl border focus:outline-none transition-colors ${
                     isDark
                       ? "bg-[#050208] border-gray-700 text-white placeholder-gray-500 focus:border-purple-500"
@@ -626,7 +707,13 @@ export default function Home(): React.JSX.Element {
                 />
                 <input
                   type="email"
+                  name="email"
+                  value={formState.email}
+                  onChange={handleFieldChange}
                   placeholder={copy.contact.form.emailPlaceholder}
+                  maxLength={150}
+                  autoComplete="email"
+                  required
                   className={`w-full px-6 py-4 rounded-xl border focus:outline-none transition-colors ${
                     isDark
                       ? "bg-[#050208] border-gray-700 text-white placeholder-gray-500 focus:border-purple-500"
@@ -635,6 +722,10 @@ export default function Home(): React.JSX.Element {
                 />
               </div>
               <select
+                name="helpType"
+                value={formState.helpType}
+                onChange={handleFieldChange}
+                required
                 className={`w-full px-6 py-4 rounded-xl border focus:outline-none transition-colors ${
                   isDark
                     ? "bg-[#050208] border-gray-700 text-white focus:border-purple-500"
@@ -649,8 +740,13 @@ export default function Home(): React.JSX.Element {
                 ))}
               </select>
               <textarea
+                name="projectDetails"
+                value={formState.projectDetails}
+                onChange={handleFieldChange}
                 placeholder={copy.contact.form.projectPlaceholder}
                 rows={3}
+                maxLength={2000}
+                autoComplete="off"
                 className={`w-full px-6 py-4 rounded-xl border focus:outline-none transition-colors resize-none ${
                   isDark
                     ? "bg-[#050208] border-gray-700 text-white placeholder-gray-500 focus:border-purple-500"
@@ -659,14 +755,21 @@ export default function Home(): React.JSX.Element {
               />
               <motion.button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold rounded-xl bg-gradient-to-r from-purple-500 to-cyan-400 text-white"
+                disabled={!isFormValid || isSubmitting}
+                aria-busy={isSubmitting}
+                className={`w-full inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold rounded-xl bg-gradient-to-r from-purple-500 to-cyan-400 text-white ${
+                  !isFormValid || isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+                }`}
                 whileHover={{
-                  scale: 1.02,
-                  boxShadow: "0 0 40px rgba(139, 92, 246, 0.6)",
+                  scale: !isFormValid || isSubmitting ? 1 : 1.02,
+                  boxShadow:
+                    !isFormValid || isSubmitting
+                      ? "0 0 0 rgba(139, 92, 246, 0)"
+                      : "0 0 40px rgba(139, 92, 246, 0.6)",
                 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {copy.contact.form.submitLabel}
+                {isSubmitting ? "Sending..." : copy.contact.form.submitLabel}
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -681,6 +784,21 @@ export default function Home(): React.JSX.Element {
                   />
                 </svg>
               </motion.button>
+              <div
+                className="min-h-[28px] text-sm text-left"
+                aria-live="polite"
+                role="status"
+              >
+                {status === "success" ? (
+                  <span className={isDark ? "text-green-400" : "text-green-700"}>
+                    {successMessage}
+                  </span>
+                ) : status === "error" && errorMessage ? (
+                  <span className={isDark ? "text-rose-300" : "text-rose-600"}>
+                    {errorMessage}
+                  </span>
+                ) : null}
+              </div>
             </form>
 
             <p className={isDark ? "text-gray-500" : "text-gray-400"}>
