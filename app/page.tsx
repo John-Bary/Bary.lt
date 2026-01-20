@@ -82,8 +82,6 @@ const copyByLanguage = {
         "Served businesses in the UK, Spain, and Lithuania",
         "10+ projects delivered over 5+ years in 3 countries",
       ],
-      photoCaption: "Add your photo here",
-      locationLabel: "Lithuania",
     },
     contact: {
       titleLead: "Ready to",
@@ -171,8 +169,6 @@ const copyByLanguage = {
         "Tarptautinė patirtis: Lietuva, Ispanija, JK",
         "Tikri rezultatai: augimas, o ne tik gražios ataskaitos",
       ],
-      photoCaption: "Jonas Barysas, įkūrėjas",
-      locationLabel: "Lietuva",
     },
     contact: {
       titleLead: "Laikas",
@@ -624,33 +620,15 @@ export default function Home(): React.JSX.Element {
               <div
                 className={`aspect-square rounded-2xl flex items-center justify-center overflow-hidden ${
                   isDark
-                    ? "bg-gradient-to-br from-purple-500/20 to-cyan-400/20 border border-purple-500/30"
-                    : "bg-gradient-to-br from-purple-100 to-cyan-100 border border-purple-200"
+                    ? "bg-gradient-to-br from-purple-500/10 to-cyan-400/10"
+                    : "bg-gradient-to-br from-purple-50 to-cyan-50"
                 }`}
               >
-                <div className="text-center p-8">
-                  <div className="text-8xl mb-4">👨‍💼</div>
-                  <p
-                    className={`text-sm ${
-                      isDark ? "text-gray-500" : "text-gray-400"
-                    }`}
-                  >
-                    {copy.about.photoCaption}
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className={`absolute -bottom-4 -right-4 px-4 py-2 rounded-xl ${
-                  isDark
-                    ? "bg-[#0a0612] border border-purple-500/30"
-                    : "bg-white border border-purple-200 shadow-lg"
-                }`}
-              >
-                <span className="text-lg mr-2">🇱🇹</span>
-                <span className={isDark ? "text-white" : "text-gray-900"}>
-                  {copy.about.locationLabel}
-                </span>
+                <img
+                  src="/images/about-illustration.svg"
+                  alt="Business growth and technology illustration"
+                  className="w-full h-full object-contain p-8"
+                />
               </div>
 
               <div
