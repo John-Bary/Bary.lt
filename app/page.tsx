@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import Navbar from "@/components/ui/Navbar";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -22,6 +22,38 @@ const staggerContainer = {
     },
   },
 };
+
+// Animated Counter Component
+function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, {
+    damping: 50,
+    stiffness: 100,
+  });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [displayValue, setDisplayValue] = useState("0");
+
+  useEffect(() => {
+    if (isInView) {
+      motionValue.set(value);
+    }
+  }, [isInView, value, motionValue]);
+
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (latest) => {
+      setDisplayValue(Math.floor(latest).toString());
+    });
+    return unsubscribe;
+  }, [springValue]);
+
+  return (
+    <div ref={ref}>
+      {displayValue}
+      {suffix}
+    </div>
+  );
+}
 
 const clientLogos = [
   { name: "TechCorp", logo: "🏢" },
@@ -538,6 +570,20 @@ export default function Home(): React.JSX.Element {
           isDark ? "bg-[#0a0612]" : "bg-white"
         }`}
       >
+        {/* Decorative Divider */}
+        <motion.div
+          className="max-w-6xl mx-auto mb-12"
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >
+          <div className="relative h-1 w-full overflow-hidden rounded-full">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-cyan-400 to-purple-500 opacity-70" />
+            <div className={`absolute inset-0 blur-md ${isDark ? "bg-gradient-to-r from-purple-500/50 via-cyan-400/50 to-purple-500/50" : "bg-gradient-to-r from-purple-400/30 via-cyan-300/30 to-purple-400/30"}`} />
+          </div>
+        </motion.div>
+
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -571,38 +617,59 @@ export default function Home(): React.JSX.Element {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6 mb-8">
-                {copy.about.stats.map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent">
-                      {stat.number}
+                {copy.about.stats.map((stat) => {
+                  // Extract number and suffix from stat.number (e.g., "10+" -> 10 and "+")
+                  const match = stat.number.match(/^(\d+)(.*)$/);
+                  const numericValue = match ? parseInt(match[1]) : 0;
+                  const suffix = match ? match[2] : "";
+
+                  return (
+                    <div key={stat.label} className="text-center">
+                      <div className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent">
+                        <AnimatedCounter value={numericValue} suffix={suffix} />
+                      </div>
+                      <div
+                        className={`text-sm ${
+                          isDark ? "text-gray-500" : "text-gray-500"
+                        }`}
+                      >
+                        {stat.label}
+                      </div>
                     </div>
-                    <div
-                      className={`text-sm ${
-                        isDark ? "text-gray-500" : "text-gray-500"
-                      }`}
-                    >
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <ul className="space-y-4">
                 {copy.about.bullets.map((item, index) => (
                   <motion.li
                     key={item}
-                    className={`flex items-center gap-3 ${
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all cursor-default ${
                       isDark ? "text-gray-300" : "text-gray-700"
                     }`}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                     viewport={{ once: true }}
+                    whileHover={{
+                      scale: 1.02,
+                      x: 5,
+                      backgroundColor: isDark
+                        ? "rgba(168, 85, 247, 0.05)"
+                        : "rgba(168, 85, 247, 0.05)",
+                      transition: { duration: 0.2 },
+                    }}
                   >
-                    <span
+                    <motion.span
                       className={`w-2 h-2 rounded-full ${
                         isDark ? "bg-cyan-400" : "bg-purple-500"
                       }`}
+                      whileHover={{
+                        scale: 1.5,
+                        boxShadow: isDark
+                          ? "0 0 8px rgba(34, 211, 238, 0.6)"
+                          : "0 0 8px rgba(168, 85, 247, 0.6)",
+                      }}
                     />
                     {item}
                   </motion.li>
