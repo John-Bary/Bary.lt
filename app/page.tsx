@@ -228,6 +228,18 @@ export default function Home(): React.JSX.Element {
     formState.name.trim().length > 0 &&
     formState.email.trim().length > 0 &&
     formState.helpType.trim().length > 0;
+
+  // Debug logging for form validation
+  useEffect(() => {
+    console.log("Form validation state:", {
+      isFormValid,
+      hasName: formState.name.trim().length > 0,
+      hasEmail: formState.email.trim().length > 0,
+      hasHelpType: formState.helpType.trim().length > 0,
+      helpTypeValue: formState.helpType,
+    });
+  }, [isFormValid, formState]);
+
   const successMessage =
     language === "lt"
       ? "Ačiū! Atsakysime per 24 valandas."
@@ -766,8 +778,9 @@ export default function Home(): React.JSX.Element {
                 type="submit"
                 disabled={!isFormValid || isSubmitting}
                 aria-busy={isSubmitting}
+                title={!isFormValid ? "Please fill all required fields including selecting a help type" : ""}
                 className={`w-full inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold rounded-xl bg-gradient-to-r from-purple-500 to-cyan-400 text-white ${
-                  !isFormValid || isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+                  !isFormValid || isSubmitting ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 whileHover={{
                   scale: !isFormValid || isSubmitting ? 1 : 1.02,
