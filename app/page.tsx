@@ -250,10 +250,14 @@ export default function Home(): React.JSX.Element {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
+    event.stopPropagation();
+
+    console.log("Form submission started");
     setStatus("submitting");
     setErrorMessage(null);
 
     try {
+      console.log("Sending request to API...");
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -266,13 +270,17 @@ export default function Home(): React.JSX.Element {
         }),
       });
 
+      console.log("API response status:", response.status);
+
       if (!response.ok) {
         const data = (await response.json().catch(() => null)) as { error?: string } | null;
+        console.error("API error:", data);
         setStatus("error");
         setErrorMessage(data?.error ?? "Something went wrong. Please try again.");
         return;
       }
 
+      console.log("Form submitted successfully!");
       setStatus("success");
       setFormState({
         name: "",
@@ -281,6 +289,7 @@ export default function Home(): React.JSX.Element {
         projectDetails: "",
       });
     } catch (error) {
+      console.error("Form submission error:", error);
       setStatus("error");
       setErrorMessage("Unable to submit right now. Please try again.");
     }
@@ -785,17 +794,17 @@ export default function Home(): React.JSX.Element {
                 </svg>
               </motion.button>
               <div
-                className="min-h-[28px] text-sm text-left"
+                className="min-h-[28px] text-base font-medium text-center"
                 aria-live="polite"
                 role="status"
               >
                 {status === "success" ? (
-                  <span className={isDark ? "text-green-400" : "text-green-700"}>
-                    {successMessage}
+                  <span className={`${isDark ? "text-green-400" : "text-green-700"} bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg inline-block`}>
+                    ✓ {successMessage}
                   </span>
                 ) : status === "error" && errorMessage ? (
-                  <span className={isDark ? "text-rose-300" : "text-rose-600"}>
-                    {errorMessage}
+                  <span className={`${isDark ? "text-rose-300" : "text-rose-600"} bg-rose-50 dark:bg-rose-900/20 px-4 py-2 rounded-lg inline-block`}>
+                    ⚠ {errorMessage}
                   </span>
                 ) : null}
               </div>
